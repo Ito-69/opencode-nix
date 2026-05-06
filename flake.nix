@@ -34,12 +34,21 @@
     in
     {
       overlays.default = final: prev:
+      let
+        ocPkgs = opencode.overlays.default final prev;
+      in
       {
         lib = prev.lib // {
           opencode = mkLib final;
         };
-      }
-      // (opencode.overlays.default final prev);
+        opencode = ocPkgs.opencode;
+        # Git master on anomalyco/opencode removed Tauri (packages/desktop/src-tauri)
+        # before nix/desktop.nix was updated — Cargo.lock path vanishes and the
+        # upstream overlay breaks. CLI still comes from the flake; desktop is built
+        # from nixpkgs' `opencode` src (release tag with src-tauri). Small CLI vs
+        # desktop version skew until upstream Nix catches up with Electron.
+        opencode-desktop = prev.opencode-desktop.override { opencode = prev.opencode; };
+      };
 
       nixosModules = {
         opencode = import ./nix/nixos/module.nix;
