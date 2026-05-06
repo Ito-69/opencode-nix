@@ -38,6 +38,19 @@
           opencode = mkLib final;
         };
         opencode = opencode.packages.${final.system}.default;
+        # Replace nixpkgs `opencode` with the flake CLI, and keep desktop's Rust
+        # source in sync. `buildRustPackage` is built with extendMkDerivation:
+        # `overrideAttrs { cargoHash = ... }` does not rebuild cargoDeps (the hash
+        # is ignored). Supply `cargoDeps` via fetchCargoVendor instead.
+        # Update `hash` when anomalyco/opencode (flake input) rev bumps and Nix reports mismatch.
+        opencode-desktop =
+          (prev.opencode-desktop.override { opencode = final.opencode; }).overrideAttrs (old: {
+            cargoDeps = final.rustPlatform.fetchCargoVendor {
+              inherit (old) src cargoRoot pname version;
+              patches = old.patches or [ ];
+              hash = "sha256-6YOygSNNhAAD49ZkhWS03qGwVP2mvwItzJeyg0/ARLg=";
+            };
+          });
       };
 
       nixosModules = {
