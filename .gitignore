@@ -3,3 +3,4 @@ result
 .direnv
 result*
 *.sw?
+/opencode.json

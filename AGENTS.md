@@ -1,5 +1,17 @@
 # AGENTS.md — ocnix project conventions
 
+## Project Context
+
+This repository (`/home/ito/opencode-nix`) is a **GitHub fork** of the `opencode-nix` flake — a Nix module system for generating `opencode.json` config files and managing OpenCode agents declaratively.
+
+It is part of the larger **NixOS dotfiles ecosystem** (`~/nixos-dotfiles`) and is used to configure AI agents for the NixOS hosts (`broken` and `nixos-btw`).
+
+When working in this repo:
+- You are editing a **Nix flake** that provides typed configuration generation for OpenCode
+- Changes here affect how `opencode.json` is generated via `pkgs.lib.opencode.mkOpenCodeConfig`
+- The flake is consumed by `~/nixos-dotfiles/flake.nix` as an input
+- Run `nix flake check` before committing to validate configs
+
 ## Repo layout
 
 ```

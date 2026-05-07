@@ -90,10 +90,10 @@ in
       ];
     };
     plugin = mkOption {
-      type = types.nullOr (types.listOf types.str);
+      type = types.nullOr (types.listOf types.raw);
       default = null;
-      description = "Plugin npm package names or local paths. Plugins extend opencode with custom tools and commands.";
-      example = [ "@my-org/opencode-plugin-lint" ];
+      description = "Plugin npm package names or local paths. Plugins extend opencode with custom tools and commands. Supports configuration tuples: [ \"name\" { option = value; } ].";
+      example = [ "@my-org/opencode-plugin-lint" [ "opencode-mempalace" { threshold = 15; } ] ];
     };
     disabled_providers = mkOption {
       type = types.nullOr (types.listOf types.str);
